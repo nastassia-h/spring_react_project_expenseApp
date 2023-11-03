@@ -1,2 +1,5 @@
-app/node_modules
+react/node_modules
 target/
+/node_modules
+.settings
+.vscode

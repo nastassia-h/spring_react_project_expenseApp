@@ -91,11 +91,18 @@ public class JwtTokenUtil {
       }
    }
 
-   public String getEmail(Claims claims) {
-      return claims.getSubject();
+   public String getUsername(String token) {
+      return getAllClaimsFromToken(token).getSubject();
    }
 
-   private List<String> getRoles(Claims claims) {
-      return (List<String>) claims.get("roles");
+   public List<String> getRoles(String token) {
+      return getAllClaimsFromToken(token).get("roles", List.class);
+   }
+
+   private Claims getAllClaimsFromToken(String token) {
+      return Jwts.parser()
+            .setSigningKey(secret_key)
+            .parseClaimsJws(token)
+            .getBody();
    }
 }

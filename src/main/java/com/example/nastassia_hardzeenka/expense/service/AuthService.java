@@ -1,10 +1,11 @@
 package com.example.nastassia_hardzeenka.expense.service;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.example.nastassia_hardzeenka.expense.model.JwtRequest;
 import com.example.nastassia_hardzeenka.expense.model.JwtResponse;
 import com.example.nastassia_hardzeenka.expense.model.RegistrationUser;
 import com.example.nastassia_hardzeenka.expense.model.User;
+import com.example.nastassia_hardzeenka.expense.repository.UserRepository;
 import com.example.nastassia_hardzeenka.expense.utils.JwtTokenUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
    @Autowired
    private CustomUserDetailsService userService;
+   @Autowired
+   private UserRepository userRepository;
    @Autowired
    private JwtTokenUtil jwtTokenUtils;
    @Autowired
@@ -40,7 +44,13 @@ public class AuthService {
       }
       UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
       String token = jwtTokenUtils.createToken(userDetails);
-      return ResponseEntity.ok(new JwtResponse(userDetails.getUsername(), token));
+      User user = userRepository.findByUsername(userDetails.getUsername());
+
+      Map response = Map.of(
+            "user", user,
+            "token", new JwtResponse(userDetails.getUsername(), token).getToken());
+
+      return ResponseEntity.ok(response);
    }
 
    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUser registrationUser) {
@@ -55,6 +65,13 @@ public class AuthService {
                HttpStatus.BAD_REQUEST);
       }
       User user = userService.createNewUser(registrationUser);
-      return ResponseEntity.ok(user);
+      UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+      String token = jwtTokenUtils.createToken(userDetails);
+
+      Map response = Map.of(
+            "user", user,
+            "token", new JwtResponse(userDetails.getUsername(), token).getToken());
+
+      return ResponseEntity.ok(response);
    }
 }

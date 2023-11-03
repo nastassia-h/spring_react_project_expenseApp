@@ -2,7 +2,7 @@ package com.example.nastassia_hardzeenka.expense.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +14,8 @@ import com.example.nastassia_hardzeenka.expense.model.RegistrationUser;
 import com.example.nastassia_hardzeenka.expense.service.AuthService;
 
 @RestController
-@RequestMapping("rest/api")
+// @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping(value = "rest/api", produces = "application/json")
 public class AuthController {
    @Autowired
    private AuthService authService;
