@@ -34,6 +34,12 @@ public class User {
 	@Column(name = "username")
 	private String username;
 
+	@Column(name = "location")
+	private String location;
+
+	@Column(name = "occupation")
+	private String occupation;
+
 	@Column(name = "email")
 	private String email;
 

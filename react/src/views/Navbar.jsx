@@ -14,17 +14,29 @@ const Navbar = () => {
    const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false)
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const user = useSelector(state => state.user)
+   //const user = useSelector(state => state.user)
    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)")
    const mode = useSelector(state => state.mode)
    const theme = useTheme()
-   const neutralLight = theme.palette.primary.light
+   const neutralMedium = theme.palette.neutral.medium
    const dark = theme.palette.primary.dark
    const background = theme.background
    const primaryLight = theme.palette.primary.light
    const alt = theme.palette.background.alt
 
-   const fullName = `${user.first_name} ${user.last_name}`
+   const user = {
+      "id": 1,
+      "firstname": "Nastassia",
+      "lastname": "Hardzeenka",
+      "username": "gordeenko.na@gmail.com",
+      "location": "Poland",
+      "occupation": "Web-developer",
+      "email": "gordeenko.na@gmail.com",
+      "password": "$2a$10$Lodio3vGKi1DmaV7jygaEOa64gm.gX5/DgFlpwELmv9XJwXFMQGLa",
+      "expenses": null
+   };
+
+   const fullName = `${user.firstname} ${user.lastname}`
 
    const logout = () => {
       axiosClient.post('/logout')
@@ -57,7 +69,7 @@ const Navbar = () => {
                   },
                }}
             >
-               Peoplebook
+               Every dollar
             </Typography>
             {isNonMobileScreens && (
                <FlexBetween position='relative' border={`2px solid ${primaryLight}`} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
@@ -83,7 +95,7 @@ const Navbar = () => {
                      value={fullName}
                      sx={{
                         color: 'white',
-                        backgroundColor: neutralLight,
+                        backgroundColor: neutralMedium,
                         maxWidth: "250px",
                         borderRadius: "0.25rem",
                         p: "0.25rem 1rem",
@@ -120,7 +132,7 @@ const Navbar = () => {
                zIndex="10"
                maxWidth="500px"
                minWidth="300px"
-               backgroundColor={neutralLight}
+               backgroundColor={neutralMedium}
             >
                {/* Close icone */}
                <Box display="flex" justifyContent="flex-end" p="1rem">
@@ -144,7 +156,7 @@ const Navbar = () => {
                      <Select
                         value={fullName}
                         sx={{
-                           backgroundColor: neutralLight,
+                           backgroundColor: neutralMedium,
                            maxWidth: "200px",
                            borderRadius: "0.25rem",
                            p: "0.25rem 1rem",
@@ -153,7 +165,7 @@ const Navbar = () => {
                               width: "3rem"
                            },
                            "& .MuiSelect-select:focus": {
-                              backgroundColor: neutralLight
+                              backgroundColor: neutralMedium
                            }
                         }}
                         input={<InputBase />}

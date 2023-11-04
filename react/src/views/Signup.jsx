@@ -61,7 +61,7 @@ const Signup = () => {
       formData.append('username', values['email'])
       formData.append('image_path', image.imagePath)
 
-      axiosClient.post('/registration', formData)
+      axiosClient.post('rest/api/registration', formData)
          .then(({ data }) => {
             dispatch(setUser({ user: data.user }))
             dispatch(setToken({ token: data.token }))

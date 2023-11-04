@@ -26,15 +26,15 @@ export const authSlice = createSlice({
          state.token = action.payload.token;
          localStorage.setItem('ACCESS_TOKEN', action.payload.token)
       },
-      setFriends: (state, action) => {
+      setExpenses: (state, action) => {
          if (state.user) {
-            state.user.friend_list = action.payload.friends;
+            state.user.expenses = action.payload.expenses;
          } else {
-            console.error("user friend non-existent :(")
+            console.error("You have no expensies yet")
          }
       },
-      setPosts: (state, action) => {
-         state.posts = action.payload.posts
+      setCategories: (state, action) => {
+         state.categories = action.payload.categories
       },
       setPost: (state, action) => {
          const updatedPosts = state.posts.map(post => {
@@ -60,5 +60,5 @@ export const authSlice = createSlice({
    }
 })
 
-export const { setMode, setToken, setComment, deleteComment, setLogout, setUser, setFriends, setPost, setPosts } = authSlice.actions
+export const { setMode, setToken, setFriends, setComment, deleteComment, setLogout, setUser, setExpenses, setCategories, setPosts } = authSlice.actions
 export default authSlice.reducer

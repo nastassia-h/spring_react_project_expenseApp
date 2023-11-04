@@ -7,11 +7,11 @@ import { useEffect } from 'react'
 
 const DefaultLayout = () => {
 
-   const token = useSelector(state => state.token)
+   //const token = useSelector(state => state.token)
 
-   if (!token) {
-      return <Navigate to="/login" />
-   }
+   // if (!token) {
+   //    return <Navigate to="/login" />
+   // }
 
    return (
       <Box>

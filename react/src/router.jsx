@@ -6,6 +6,7 @@ import Login from './views/Login'
 import Signup from './views/Signup'
 import NotFound from './views/NotFound'
 import UserForm from "./views/widgets/UserForm";
+import CategoriesPage from "./views/CategoriesPage";
 
 
 const router = createBrowserRouter([
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
          {
             path: '/homepage/edit',
             element: <UserForm />
+         },
+         {
+            path: '/categories',
+            element: <CategoriesPage />
          }
       ]
    },

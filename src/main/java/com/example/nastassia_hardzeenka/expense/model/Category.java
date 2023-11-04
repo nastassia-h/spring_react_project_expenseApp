@@ -24,4 +24,10 @@ public class Category {
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "subtitle")
+	private String subtitle;
+
+	@Column(name = "imagePath")
+	private String imagePath;
+
 }
