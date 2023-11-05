@@ -21,7 +21,7 @@ import com.example.nastassia_hardzeenka.expense.repository.UserRepository;
 
 @RestController
 // @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(value = "user", produces = "application/json")
+@RequestMapping(value = "rest/api/user", produces = "application/json")
 public class UserController {
    @Autowired
    private UserRepository userRepository;

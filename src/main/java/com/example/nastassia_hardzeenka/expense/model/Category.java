@@ -1,11 +1,14 @@
 package com.example.nastassia_hardzeenka.expense.model;
 
+import java.util.Collection;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,7 +30,10 @@ public class Category {
 	@Column(name = "subtitle")
 	private String subtitle;
 
-	@Column(name = "imagePath")
-	private String imagePath;
+	@Column(name = "categoryPicturePath")
+	private String categoryPicturePath;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+	private Collection<Expense> expenses;
 
 }

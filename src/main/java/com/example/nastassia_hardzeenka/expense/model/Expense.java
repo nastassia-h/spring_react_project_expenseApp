@@ -27,15 +27,13 @@ public class Expense {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "expensedate")
-	private Instant expensedate;
+	@Column(name = "date")
+	private Instant date;
 
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "location")
-	private String location;
-
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
@@ -44,5 +42,4 @@ public class Expense {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nastassia_hardzeenka.expense.model.Category;
@@ -22,7 +23,7 @@ import com.example.nastassia_hardzeenka.expense.repository.CategoryRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/api")
+@RequestMapping("rest/api")
 public class CategoryController {
 
 	private CategoryRepository categoryRepository;
@@ -37,7 +38,6 @@ public class CategoryController {
 		return categoryRepository.findAll();
 	}
 
-	// category/2
 	@GetMapping("/category/{id}")
 	ResponseEntity<?> getCategory(@PathVariable Long id) {
 		Optional<Category> category = categoryRepository.findById(id);

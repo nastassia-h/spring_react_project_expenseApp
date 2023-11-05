@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nastassia_hardzeenka.expense.model.Category;
@@ -21,15 +22,15 @@ import com.example.nastassia_hardzeenka.expense.repository.ExpenseRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/api")
+@RequestMapping("rest/api")
 public class ExpenseController {
 
 	@Autowired
 	private ExpenseRepository expenseRepository;
 
 	@GetMapping("/expenses")
-	List<Expense> getExpenses() {
-		return expenseRepository.findAll();
+	List<Expense> getExpenses(@RequestParam Long userId) {
+		return expenseRepository.findByUserId(userId);
 	}
 
 	@DeleteMapping("/expenses/{id}")
@@ -41,6 +42,6 @@ public class ExpenseController {
 	@PostMapping("/expenses")
 	ResponseEntity<Expense> createExpense(@RequestBody Expense expense) throws URISyntaxException {
 		Expense result = expenseRepository.save(expense);
-		return ResponseEntity.created(new URI("/api/expenses" + result.getId())).body(result);
+		return ResponseEntity.ok().body(result);
 	}
 }
