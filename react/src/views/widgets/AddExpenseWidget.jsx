@@ -90,7 +90,7 @@ const AddExpenseWidget = ({ isAddOpen = false, selectedCategory }) => {
                   padding: "1rem 2rem",
                }}
             />
-            <FlexBetween gap="1rem">
+            <FlexBetween gap="1rem" sx={{ flexWrap: "wrap" }}>
                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                      label="Choose expense date"
@@ -98,33 +98,33 @@ const AddExpenseWidget = ({ isAddOpen = false, selectedCategory }) => {
                      onChange={(e) => setExpense({ ...expense, date: e.target.value })}
                   />
                </LocalizationProvider>
+               <FormControl>
+                  <InputLabel id="demo-select-small-label">Category</InputLabel>
+                  <Select
+                     sx={{ minWidth: "100px" }}
+                     label="Category"
+                     color="primary"
+                     labelId="demo-select-small-label"
+                     value={expense.category}
+                     onChange={(e) => setExpense({ ...expense, category: e.target.value })}
+                  >
+                     {categories.map(category =>
+                        <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
+                     )}
+                  </Select>
+               </FormControl>
                <InputBase
                   type="number"
                   placeholder="Cost..."
                   onChange={(e) => setExpense({ ...expense, cost: e.target.value })}
                   value={expense.cost}
                   sx={{
-                     width: "80%",
                      border: `2px solid ${palette.primary.light}`,
                      borderRadius: "2rem",
                      padding: "1rem 2rem",
                   }}
                />
             </FlexBetween>
-            <FormControl >
-               <InputLabel id="demo-select-small-label">Category</InputLabel>
-               <Select
-                  label="Category"
-                  color="primary"
-                  labelId="demo-select-small-label"
-                  value={expense.category}
-                  onChange={(e) => setExpense({ ...expense, category: e.target.value })}
-               >
-                  {categories.map(category =>
-                     <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
-                  )}
-               </Select>
-            </FormControl>
             <FlexBetween>
                <Button
                   disabled={!expense.title || !expense.date || !expense.cost}

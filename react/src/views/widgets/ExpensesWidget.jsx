@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Divider, Typography, useTheme } from "@mui/material";
+import { Box, Divider, Link, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setExpenses } from "../../store/index.js";
 import axiosClient from "../../axios-client.js";
@@ -74,7 +74,7 @@ const ExpensesWidget = () => {
                Your last expenses...
             </Typography>
             <Box display={'flex'} flexDirection={'column'} gap={'0.5rem'}>
-               {expenses.map(expense =>
+               {expenses.slice(0, 5).map(expense =>
                   <>
                      <Expense
                         expense={expense}
@@ -85,6 +85,15 @@ const ExpensesWidget = () => {
 
                )}
             </Box>
+            <Link href="/categories" underline="false">
+               <Typography
+                  color={palette.primary.mediumMain}
+                  variant="h6"
+                  fontWeight="400"
+               >
+                  Show more...
+               </Typography>
+            </Link>
          </Box>
       </WidgetWrapper>
    );

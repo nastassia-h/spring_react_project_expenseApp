@@ -7,12 +7,13 @@ import { TabList, TabPanel } from '@mui/lab';
 import Expense from './widgets/Expense';
 import { categories } from '../data/categories';
 import { expenses } from '../data/expenses';
+import { ExpensesPieChartWidget } from './widgets/ExpensesPieChartWidget';
 
 const CategoriesPage = () => {
    const isNonMobileScreen = useMediaQuery("(min-width:1000px)");
    const { palette } = useTheme();
    const main = palette.primary.main;
-   const tabIndex = window.location.hash.replace('#', '');
+   const tabIndex = window.location.hash ? window.location.hash.replace('#', '') : '1';
 
    const [selectedCategory, setSelectedCategory] = useState(Number(tabIndex));
    const handleChange = (SyntheticEvent, selectedCategory) => {
@@ -26,7 +27,7 @@ const CategoriesPage = () => {
          width="100%"
          padding="2rem 6%"
          display={isNonMobileScreen ? "flex" : "block"}
-         gap="0.5rem"
+         gap="1rem"
          justifyContent="space-between"
       >
          <TabContext value={selectedCategory}>
@@ -51,17 +52,23 @@ const CategoriesPage = () => {
                   ))}
                </TabList>
             </Box>
-            <Box display={'flex'} flexDirection={'column'} gap={'2rem'} flexBasis={isNonMobileScreen ? "77%" : undefined}
-               mt={isNonMobileScreen ? undefined : "2rem"}
-            >
-               <AddExpenseWidget selectedCategory={selectedCategory} />
-               {expenses && (expenses.map(expense =>
-                  <TabPanel value={expense.id}>
-                     <Expense expense={expense} />
-                     <Divider />
-                  </TabPanel>
-               ))}
-               {/* <ExpensiesWidget userId={user.id} /> */}
+            <Box
+               display={isNonMobileScreen ? "flex" : "block"}
+               sx={{ width: "100%", alignItems: "flex-start", gap: "1rem" }}>
+               <Box display={'flex'} flexDirection={'column'} gap={'2rem'} flexBasis={isNonMobileScreen ? "80%" : undefined}
+                  mt={isNonMobileScreen ? undefined : "2rem"}
+               >
+                  <AddExpenseWidget selectedCategory={selectedCategory} />
+                  {expenses && (expenses.map(expense =>
+                     <TabPanel value={expense.category_id}>
+                        <Expense expense={expense} />
+                        <Divider />
+                     </TabPanel>
+                  ))}
+               </Box>
+               {isNonMobileScreen &&
+                  <ExpensesPieChartWidget />
+               }
             </Box>
          </TabContext>
       </Box>
