@@ -4,12 +4,13 @@ import UserWidget from './widgets/UserWidget'
 import AddExpenseWidget from './widgets/AddExpenseWidget'
 import ExpensesWidget from './widgets/ExpensesWidget'
 import ExpenseCategoriesWidget from './widgets/ExpenseCategoriesWidget'
-import { user } from '../data/user.js'
 import { ExpensesPieChartWidget } from './widgets/ExpensesPieChartWidget.jsx'
 
 const HomePage = () => {
    const isNonMobileScreen = useMediaQuery("(min-width:1000px)")
-   //const user = useSelector(state => state.user)
+   const user = useSelector(state => state.user)
+   const categories = useSelector(state => state.categories)
+
 
    return (
       <Box
@@ -33,7 +34,7 @@ const HomePage = () => {
             <ExpensesWidget />
          </Box>
          <Box flexBasis="26%" mt={isNonMobileScreen ? undefined : '1rem'}>
-            <ExpenseCategoriesWidget categoryList={user.category_list} />
+            <ExpenseCategoriesWidget categoryList={categories} />
          </Box>
       </Box>
    )

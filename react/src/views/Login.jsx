@@ -26,13 +26,6 @@ const Login = () => {
    const login = (values, onSubmitProps) => {
       setErrors(null)
 
-      axiosClient.get(`/user/1`)
-         .then(({ data }) => {
-            dispatch(
-               setUser({ user: data })
-            )
-         })
-
       axiosClient.post('rest/api/login', values)
          .then(({ data }) => {
             dispatch(setUser({ user: data.user }))

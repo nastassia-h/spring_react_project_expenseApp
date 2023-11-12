@@ -3,6 +3,7 @@ package com.example.nastassia_hardzeenka.expense.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,28 +19,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nastassia_hardzeenka.expense.model.Category;
 import com.example.nastassia_hardzeenka.expense.model.Expense;
+import com.example.nastassia_hardzeenka.expense.model.User;
 import com.example.nastassia_hardzeenka.expense.repository.ExpenseRepository;
+import com.example.nastassia_hardzeenka.expense.repository.UserRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("rest/api")
+@RequestMapping("expenses")
 public class ExpenseController {
 
 	@Autowired
 	private ExpenseRepository expenseRepository;
 
-	@GetMapping("/expenses")
+	@GetMapping("")
 	List<Expense> getExpenses(@RequestParam Long userId) {
-		return expenseRepository.findByUserId(userId);
+		return expenseRepository.findByUserIdOrderByDateDesc(userId);
 	}
 
-	@DeleteMapping("/expenses/{id}")
+	@DeleteMapping("/{id}")
 	ResponseEntity<?> deleteExpense(@PathVariable Long id) {
 		expenseRepository.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/expenses")
+	@PostMapping("")
 	ResponseEntity<Expense> createExpense(@RequestBody Expense expense) throws URISyntaxException {
 		Expense result = expenseRepository.save(expense);
 		return ResponseEntity.ok().body(result);

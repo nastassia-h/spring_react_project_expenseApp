@@ -1,11 +1,9 @@
 import { Box, Typography, useTheme, Tab } from "@mui/material"
 import Category from "../../components/Category.jsx"
 import WidgetWrapper from "../../components/WidgetWrapper.jsx"
-import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import { MoreHorizOutlined } from "@mui/icons-material"
-import { categories } from "../../data/categories.js";
 
 const ExpenseCategoriesWidget = ({ categoryList }) => {
    const dispatch = useDispatch();
@@ -33,7 +31,7 @@ const ExpenseCategoriesWidget = ({ categoryList }) => {
             Expense categories
          </Typography>
          <Box display="flex" flexDirection="column" gap="1.5rem">
-            {categories && (categories.slice(0, 5).map(category =>
+            {categoryList && (categoryList.slice(0, 5).map(category =>
                <Category
                   name={category.name}
                   subtitle={category.subtitle}

@@ -2,14 +2,15 @@ import axios from "axios";
 
 const axiosClient = axios.create({
    baseURL: `http://localhost:8080/`,
-   headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+   headers: { 'Content-Type': 'application/json' }
 })
 
 axiosClient.interceptors.request.use((config) => {
 
    const token = localStorage.getItem('ACCESS_TOKEN')
-   config.headers.Authorization = `Bearer ${token}`
-
+   if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+   }
    return config;
 })
 

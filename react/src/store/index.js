@@ -4,7 +4,8 @@ const initialState = {
    mode: "light",
    user: null,
    token: null,
-   posts: [],
+   expenses: [],
+   categories: []
 }
 
 export const authSlice = createSlice({
@@ -27,38 +28,13 @@ export const authSlice = createSlice({
          localStorage.setItem('ACCESS_TOKEN', action.payload.token)
       },
       setExpenses: (state, action) => {
-         if (state.user) {
-            state.user.expenses = action.payload.expenses;
-         } else {
-            console.error("You have no expensies yet")
-         }
+         state.expenses = action.payload.expenses;
       },
       setCategories: (state, action) => {
          state.categories = action.payload.categories
-      },
-      setPost: (state, action) => {
-         const updatedPosts = state.posts.map(post => {
-            if (post.id === action.payload.post.id) return action.payload.post
-            return post;
-         })
-         state.posts = updatedPosts
-      },
-      setComment: (state, action) => {
-         const updatedPosts = state.posts.map(post => {
-            if (post.id == action.payload.comment.post_id) return { ...post, comments: [action.payload.comment, ...post.comments] }
-            return post;
-         })
-         state.posts = updatedPosts
-      },
-      deleteComment: (state, action) => {
-         const updatedPosts = state.posts.map(post => {
-            if (post.id == action.payload.comment.post_id) return { ...post, comments: [action.payload.comment, ...post.comments] }
-            return post;
-         })
-         state.posts = updatedPosts
       }
    }
 })
 
-export const { setMode, setToken, setFriends, setComment, deleteComment, setLogout, setUser, setExpenses, setCategories, setPosts } = authSlice.actions
+export const { setMode, setToken, setLogout, setUser, setExpenses, setCategories } = authSlice.actions
 export default authSlice.reducer

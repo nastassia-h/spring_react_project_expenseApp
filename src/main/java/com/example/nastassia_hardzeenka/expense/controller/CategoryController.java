@@ -23,7 +23,6 @@ import com.example.nastassia_hardzeenka.expense.repository.CategoryRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("rest/api")
 public class CategoryController {
 
 	private CategoryRepository categoryRepository;

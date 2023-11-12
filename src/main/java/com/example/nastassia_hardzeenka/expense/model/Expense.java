@@ -1,6 +1,7 @@
 package com.example.nastassia_hardzeenka.expense.model;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,16 +31,15 @@ public class Expense {
 	@Column(name = "date")
 	private Instant date;
 
-	@Column(name = "description")
-	private String description;
+	@Column(name = "title")
+	private String title;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "category_id")
-	private Category category;
+	@Column(name = "category_id")
+	private Long category_id;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@Column(name = "cost")
+	private Float cost;
+
+	@Column(name = "user_id")
+	private Long userId;
 }

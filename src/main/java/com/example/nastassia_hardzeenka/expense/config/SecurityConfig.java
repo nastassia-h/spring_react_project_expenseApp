@@ -44,16 +44,14 @@ public class SecurityConfig {
    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
       http
-            .cors()
-            .and()
+            .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/h2-console/**").permitAll()
             .antMatchers("/rest/api/**").permitAll()
-            .anyRequest().authenticated()
+            // .anyRequest().authenticated()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-      http.csrf().ignoringAntMatchers("/h2-console/**");
       http.csrf().ignoringAntMatchers("/rest/api/**");
       http.csrf().ignoringAntMatchers("/user/**");
+      http.csrf().ignoringAntMatchers("/expenses/**");
       http.headers().frameOptions().sameOrigin();
       http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
       return http.build();
@@ -70,16 +68,5 @@ public class SecurityConfig {
    @Bean
    public BCryptPasswordEncoder passwordEncoder() {
       return new BCryptPasswordEncoder();
-   }
-
-   @Bean
-   CorsConfigurationSource corsConfigurationSource() {
-      CorsConfiguration configuration = new CorsConfiguration();
-      configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-      configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE",
-            "PUT"));
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-      source.registerCorsConfiguration("/**", configuration);
-      return source;
    }
 }

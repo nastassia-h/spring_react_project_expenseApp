@@ -8,13 +8,13 @@ import { useNavigate } from 'react-router-dom'
 import axiosClient from '../axios-client.js'
 import FlexBetween from '../components/FlexBetween'
 import UsersSearch from '../components/Search.jsx'
-import { setUser } from '../store/index.js'
+import { setUser, setExpenses, setCategories } from '../store/index.js'
 
 const Navbar = () => {
    const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false)
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   //const user = useSelector(state => state.user)
+   const user = useSelector(state => state.user)
    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)")
    const mode = useSelector(state => state.mode)
    const theme = useTheme()
@@ -23,18 +23,6 @@ const Navbar = () => {
    const background = theme.background
    const primaryLight = theme.palette.primary.light
    const alt = theme.palette.background.alt
-
-   const user = {
-      "id": 1,
-      "firstname": "Nastassia",
-      "lastname": "Hardzeenka",
-      "username": "gordeenko.na@gmail.com",
-      "location": "Poland",
-      "occupation": "Web-developer",
-      "email": "gordeenko.na@gmail.com",
-      "password": "$2a$10$Lodio3vGKi1DmaV7jygaEOa64gm.gX5/DgFlpwELmv9XJwXFMQGLa",
-      "expenses": null
-   };
 
    const fullName = `${user.firstname} ${user.lastname}`
 
@@ -46,11 +34,13 @@ const Navbar = () => {
    }
 
    useEffect(() => {
-      axiosClient.get(`/user/${user.id}`)
+      axiosClient.get(`user/${user.id}`)
          .then(({ data }) => {
-            dispatch(
-               setUser({ user: data })
-            )
+            dispatch(setUser({ user: data.user }))
+         });
+      axiosClient.get(`categories`)
+         .then(({ data }) => {
+            dispatch(setCategories({ categories: data }))
          })
    }, [])
 

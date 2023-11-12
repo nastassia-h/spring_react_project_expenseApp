@@ -32,8 +32,4 @@ public class Category {
 
 	@Column(name = "categoryPicturePath")
 	private String categoryPicturePath;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-	private Collection<Expense> expenses;
-
 }

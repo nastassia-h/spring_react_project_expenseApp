@@ -1,13 +1,13 @@
 import { Box, Tab, useMediaQuery, Typography, useTheme, Divider } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import TabContext from '@mui/lab/TabContext';
 import AddExpenseWidget from './widgets/AddExpenseWidget'
-import { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent, useEffect } from 'react';
 import { TabList, TabPanel } from '@mui/lab';
 import Expense from './widgets/Expense';
-import { categories } from '../data/categories';
-import { expenses } from '../data/expenses';
 import { ExpensesPieChartWidget } from './widgets/ExpensesPieChartWidget';
+import axiosClient from '../axios-client';
+import { setExpenses } from '../store';
 
 const CategoriesPage = () => {
    const isNonMobileScreen = useMediaQuery("(min-width:1000px)");
@@ -20,7 +20,28 @@ const CategoriesPage = () => {
       setSelectedCategory(selectedCategory);
       window.location.hash = selectedCategory;
    };
-   //const user = useSelector(state => state.user)
+   const user = useSelector(state => state.user)
+   const categories = useSelector(state => state.categories)
+   const expenses = useSelector(state => state.expenses)
+   const dispatch = useDispatch();
+   const getExpenses = async () => {
+      axiosClient.get(`/expenses?userId=${user.id}`)
+         .then(({ data }) => {
+            dispatch(setExpenses({ expenses: data }))
+         })
+   };
+
+   const onDeleteClick = (expenseId) => {
+      if (window.confirm('Are you sure you want to delete this expense?')) {
+         axiosClient.delete(`/expenses/${expenseId}`).then(() => {
+            getExpenses()
+         });
+      }
+   }
+
+   useEffect(() => {
+      getExpenses();
+   }, []);
 
    return (
       <Box
@@ -55,14 +76,13 @@ const CategoriesPage = () => {
             <Box
                display={isNonMobileScreen ? "flex" : "block"}
                sx={{ width: "100%", alignItems: "flex-start", gap: "1rem" }}>
-               <Box display={'flex'} flexDirection={'column'} gap={'2rem'} flexBasis={isNonMobileScreen ? "80%" : undefined}
+               <Box display={'flex'} flexDirection={'column'} flexBasis={isNonMobileScreen ? "80%" : undefined}
                   mt={isNonMobileScreen ? undefined : "2rem"}
                >
                   <AddExpenseWidget selectedCategory={selectedCategory} />
                   {expenses && (expenses.map(expense =>
-                     <TabPanel value={expense.category_id}>
-                        <Expense expense={expense} />
-                        <Divider />
+                     <TabPanel value={expense.category_id} key={expense.id} sx={{ p: "0.75rem" }}>
+                        <Expense expense={expense} onDeleteClick={onDeleteClick} />
                      </TabPanel>
                   ))}
                </Box>

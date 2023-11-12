@@ -46,7 +46,7 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Collection<Expense> expenses;
+	// @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	// private Collection<Expense> expenses;
 
 }

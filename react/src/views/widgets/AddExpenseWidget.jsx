@@ -24,13 +24,14 @@ import WidgetWrapper from "../../components/WidgetWrapper.jsx";
 import { useState, useMemo } from "react";
 import axiosClient from '../../axios-client.js'
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../store/index.js";
 import { categories } from "../../data/categories.js";
+import { setExpenses } from "../../store/index.js";
 
-const AddExpenseWidget = ({ isAddOpen = false, selectedCategory }) => {
-   const [expense, setExpense] = useState({ title: '', category: selectedCategory, cost: null, date: dayjs() })
+const AddExpenseWidget = ({ isAddOpen = false, selectedCategory = 1 }) => {
+   const [expense, setExpense] = useState({ title: '', category: selectedCategory, cost: '', date: dayjs() })
    const [isOpen, setIsOpen] = useState(isAddOpen);
-   //const expenses = useSelector(state => state.expenses)
+   const expenses = useSelector(state => state.expenses);
+   const user = useSelector(state => state.user)
    const dispatch = useDispatch()
    const { palette } = useTheme();
    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -42,15 +43,19 @@ const AddExpenseWidget = ({ isAddOpen = false, selectedCategory }) => {
 
    const handlePost = async () => {
       const formData = new FormData();
-      formData.append("description", post);
+      formData.append("title", expense.title);
+      formData.append("cost", expense.cost);
+      formData.append("date", new Date(expense.date).toISOString());
+      formData.append("category_id", expense.category);
+      formData.append("userId", user.id);
 
-      axiosClient.post('/expense', formData)
+      axiosClient.post('/expenses', formData)
          .then(({ data }) => {
-            dispatch(setPosts({
+            dispatch(setExpenses({
                expenses: [data, ...expenses]
             }))
          })
-      setTitle("")
+      setExpense({ title: '', category: selectedCategory, cost: '', date: dayjs() })
    };
 
    return (
@@ -95,7 +100,7 @@ const AddExpenseWidget = ({ isAddOpen = false, selectedCategory }) => {
                   <DatePicker
                      label="Choose expense date"
                      value={expense.date}
-                     onChange={(e) => setExpense({ ...expense, date: e.target.value })}
+                     onChange={(e) => setExpense({ ...expense, date: e.toISOString() })}
                   />
                </LocalizationProvider>
                <FormControl>

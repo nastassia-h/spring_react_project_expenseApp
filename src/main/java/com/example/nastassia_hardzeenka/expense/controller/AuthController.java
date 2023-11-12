@@ -14,7 +14,7 @@ import com.example.nastassia_hardzeenka.expense.model.RegistrationUser;
 import com.example.nastassia_hardzeenka.expense.service.AuthService;
 
 @RestController
-// @CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "rest/api", produces = "application/json")
 public class AuthController {
    @Autowired

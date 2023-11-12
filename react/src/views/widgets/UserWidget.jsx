@@ -9,18 +9,13 @@ import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { user } from '../../data/user'
 
 const UserWidget = ({ userId, user }) => {
-   //const currentUser = useSelector(state => state.user)
    const { palette } = useTheme();
    const navigate = useNavigate();
    const dark = palette.primary.dark;
    const medium = palette.primary.medium;
    const main = palette.primary.main;
-
-   const currentUser = user
 
    if (!user) {
       return null;
@@ -60,17 +55,16 @@ const UserWidget = ({ userId, user }) => {
                   </Typography>
                </Box>
             </FlexBetween>
-            {user.id === currentUser.id &&
-               <ManageAccountsOutlined color={dark}
-                  onClick={() => navigate('/homepage/edit')}
-                  sx={{
-                     "&:hover": {
-                        color: palette.primary.light,
-                        cursor: "pointer",
-                     },
-                  }}
-               />
-            }
+            <ManageAccountsOutlined color={dark}
+               onClick={() => navigate('/homepage/edit')}
+               sx={{
+                  "&:hover": {
+                     color: palette.primary.light,
+                     cursor: "pointer",
+                  },
+               }}
+            />
+
          </FlexBetween>
 
          <Divider />
