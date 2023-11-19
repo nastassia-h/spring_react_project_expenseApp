@@ -10,6 +10,7 @@ public class RegistrationUser {
    private String location;
    private String occupation;
    private String password;
+   private String imagePath;
    private String confirmPassword;
    private String email;
 }

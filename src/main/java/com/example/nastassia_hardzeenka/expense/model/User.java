@@ -43,6 +43,9 @@ public class User {
 	@Column(name = "email")
 	private String email;
 
+	@Column(name = "image_path")
+	private String image_path;
+
 	@Column(name = "password")
 	private String password;
 

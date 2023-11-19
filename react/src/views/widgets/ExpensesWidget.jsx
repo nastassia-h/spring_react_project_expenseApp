@@ -76,7 +76,7 @@ const ExpensesWidget = () => {
                Your last expenses...
             </Typography>
             <Box display={'flex'} flexDirection={'column'} gap={'0.5rem'}>
-               {expenses.slice(0, 5).map(expense =>
+               {expenses && [...expenses].sort((a, b) => a.date < b.date ? 1 : -1).slice(0, 5).map(expense =>
                   <Expense
                      expense={expense}
                      onDeleteClick={onDeleteClick}
@@ -90,7 +90,7 @@ const ExpensesWidget = () => {
                   variant="h6"
                   fontWeight="400"
                >
-                  Show more...
+                  Go to all...
                </Typography>
             </Link>
          </Box>

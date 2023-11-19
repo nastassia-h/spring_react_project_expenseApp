@@ -25,7 +25,7 @@ const GuestLayout = () => {
                Every dollar
             </Typography>
          </Box>
-         <Box width={isNonMobileScreen ? "50%" : "93%"} p="2rem" m="2rem auto" borderRadius="1.5rem" backgroundColor={theme.palette.background.alt}>
+         <Box width={isNonMobileScreen ? "40%" : "93%"} p="2rem" m="2rem auto" borderRadius="1.5rem" backgroundColor={theme.palette.background.alt}>
             <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
                Empower Personal Dashboard, for tracking wealth and spending
             </Typography>

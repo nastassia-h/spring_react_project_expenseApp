@@ -3,6 +3,8 @@ package com.example.nastassia_hardzeenka.expense.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
    @Autowired
    private UserRepository userRepository;
+   @Autowired
+   ServletContext context;
    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
    @Override
@@ -44,8 +48,20 @@ public class CustomUserDetailsService implements UserDetailsService {
       user.setLastname(registrationUser.getLastname());
       user.setUsername(registrationUser.getUsername());
       user.setEmail(registrationUser.getEmail());
-      user.setPassword(registrationUser.getPassword());
+      user.setLocation(registrationUser.getLocation());
+      user.setOccupation(registrationUser.getOccupation());
       user.setPassword(passwordEncoder.encode(registrationUser.getPassword()));
       return userRepository.save(user);
+   }
+
+   public User updateUser(User user) {
+      User currentUser = userRepository.findByUsername(user.getUsername());
+      currentUser.setFirstname(user.getFirstname());
+      currentUser.setLastname(user.getLastname());
+      currentUser.setUsername(user.getUsername());
+      currentUser.setLocation(user.getLocation());
+      currentUser.setOccupation(user.getOccupation());
+      currentUser.setEmail(user.getEmail());
+      return userRepository.save(currentUser);
    }
 }

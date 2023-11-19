@@ -33,9 +33,9 @@ const Login = () => {
          })
          .catch(err => {
             const response = err.response;
-            if (response && response.status === 422) {
-               console.log(response.data.errors)
-               setErrors(response.data.errors)
+            if (response && response.data.status !== 200) {
+               console.log(response.data.message)
+               setErrors(response.data.message)
             }
          })
       onSubmitProps.resetForm()
@@ -57,8 +57,9 @@ const Login = () => {
                errors,
                touched,
                handleBlur,
-               handleChange,
                handleSubmit,
+               handleChange,
+               isSubmitting,
                resetForm,
             }) => (
                <form onSubmit={handleSubmit}>
@@ -97,6 +98,7 @@ const Login = () => {
                      <Button
                         fullWidth
                         type="submit"
+                        disabled={isSubmitting}
                         sx={{
                            m: "2rem 0",
                            p: "1rem",
@@ -126,9 +128,9 @@ const Login = () => {
          </Formik>
          &nbsp;
          {errors && <Alert variant="outlined" severity="error">
-            {Object.keys(errors).map(key =>
-               <p key={key}>{errors[key][0]}</p>
-            )}
+            {/* {Object.keys(errors).map(key => */}
+            <p>{errors}</p>
+            {/* )} */}
          </Alert>}
       </>
 

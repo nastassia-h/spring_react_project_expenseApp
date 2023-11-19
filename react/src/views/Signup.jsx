@@ -1,11 +1,8 @@
 import { useState } from 'react'
 import { Box, Button, TextField, useMediaQuery, Typography, useTheme, Link, Alert, Avatar, Stack } from '@mui/material'
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import { useDispatch } from 'react-redux'
-import Dropzone from 'react-dropzone'
-import FlexBetween from '../components/FlexBetween'
 import axiosClient from '../axios-client.js'
 import { setToken, setUser } from '../store'
 
@@ -16,8 +13,7 @@ const registerSchema = yup.object().shape({
    password: yup.string().required("required"),
    confirmPassword: yup.string().required("required"),
    location: yup.string().required("required"),
-   occupation: yup.string().required("required"),
-   picture: yup.string(),
+   occupation: yup.string().required("required")
 })
 
 const initialValuesRegister = {
@@ -28,7 +24,6 @@ const initialValuesRegister = {
    confirmPassword: "",
    location: "",
    occupation: "",
-   picture: "",
 }
 
 const Signup = () => {
@@ -36,21 +31,6 @@ const Signup = () => {
    const dispatch = useDispatch()
    const isNonMobile = useMediaQuery("(min-width:600px)")
    const [errors, setErrors] = useState(null)
-   const [image, setImage] = useState({
-      imageFile: null,
-      imagePath: ""
-   })
-
-   const onImageChoose = (file) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-         setImage({
-            imageFile: file,
-            imagePath: reader.result,
-         });
-      };
-      reader.readAsDataURL(file);
-   };
 
    const register = (values, onSubmitProps) => {
       setErrors(null)
@@ -59,7 +39,6 @@ const Signup = () => {
          formData.append(value, values[value])
       }
       formData.append('username', values['email'])
-      formData.append('image_path', image.imagePath)
 
       axiosClient.post('rest/api/registration', formData)
          .then(({ data }) => {
@@ -68,13 +47,13 @@ const Signup = () => {
          })
          .catch(err => {
             const response = err.response;
-            if (response && response.status === 422) {
-               console.log(response.data.errors)
-               setErrors(response.data.errors)
+            if (response && response.status !== 200) {
+               console.log(response.data.message)
+               setErrors(response.data.message)
             }
          })
 
-      // onSubmitProps.resetForm()
+      onSubmitProps.resetForm()
    }
 
    const handleFormSubmit = (values, onSubmitProps) => {
@@ -147,47 +126,6 @@ const Signup = () => {
                         helperText={touched.occupation && errors.occupation}
                         sx={{ gridColumn: "span 4" }}
                      />
-                     <Box
-                        gridColumn="span 4"
-                        border={`1px solid ${palette.primary.dark}`}
-                        borderRadius="5px"
-                        p="1rem"
-                     >
-                        <Dropzone
-                           acceptedFiles=".jpg,.jpeg,.png"
-                           multiple={false}
-                           onDrop={acceptedFiles => { setFieldValue("picture", acceptedFiles[0]); onImageChoose(acceptedFiles[0]) }}
-                        >
-                           {({ getRootProps, getInputProps }) => (
-                              <Box
-                                 {...getRootProps()}
-                                 sx={{ "&:hover": { cursor: "pointer" } }}
-                              >
-                                 <input {...getInputProps()} />
-                                 <Box
-                                    display='flex'
-                                    justifyContent='space-between'
-                                    alignItems='center'
-                                 >
-                                    {!values.picture?.name ? (
-                                       <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-                                          <p><EditOutlinedIcon /></p>
-                                          <p>Add Picture Here</p>
-                                       </Stack>
-                                    ) : (
-                                       <Box display={'flex'} width={'100%'} justifyContent="space-between" alignItems="center">
-                                          <Avatar sx={{ width: 70, height: 70 }} src={image.imagePath} />
-                                          <Stack direction="row" spacing={2} justifyContent="center" alignItems="top">
-                                             <Typography>{values.picture.name}</Typography>
-                                             <p><EditOutlinedIcon /></p>
-                                          </Stack>
-                                       </Box>
-                                    )}
-                                 </Box>
-                              </Box>
-                           )}
-                        </Dropzone>
-                     </Box>
                      <TextField
                         label="Email"
                         onBlur={handleBlur}
@@ -255,9 +193,9 @@ const Signup = () => {
          </Formik>
          &nbsp;
          {errors && <Alert variant="outlined" severity="error">
-            {Object.keys(errors).map(key =>
-               <p key={key}>{errors[key][0]}</p>
-            )}
+            {/* {Object.keys(errors).map(key => */}
+            <p>{errors}</p>
+            {/* )} */}
          </Alert>}
       </>
    )

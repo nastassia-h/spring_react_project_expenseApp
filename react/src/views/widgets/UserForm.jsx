@@ -1,24 +1,18 @@
 import { useState, useEffect } from 'react'
 import { Box, Button, TextField, useMediaQuery, Stack, Typography, useTheme, Alert, Avatar } from '@mui/material'
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined"
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import Dropzone from 'react-dropzone'
-import FlexBetween from '../../components/FlexBetween'
 import axiosClient from '../../axios-client.js'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../../store/index.js'
 
 const registerSchema = yup.object().shape({
-   first_name: yup.string().required("required"),
-   last_name: yup.string().required("required"),
+   firstname: yup.string().required("required"),
+   lastname: yup.string().required("required"),
    email: yup.string().email("invalid email").required("required"),
-   password: yup.string(),
-   password_confirmation: yup.string(),
    location: yup.string().required("required"),
-   occupation: yup.string().required("required"),
-   picture: yup.string(),
+   occupation: yup.string().required("required")
 })
 
 const UserForm = () => {
@@ -32,40 +26,17 @@ const UserForm = () => {
    const [updatedUser, setUpdatedUser] = useState({
       ...currentUser,
       image: null,
-      password: "",
-      password_confirmation: ""
    })
 
-   const onImageChoose = (file) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-         setUpdatedUser({
-            ...updatedUser,
-            image: file,
-            image_url: reader.result,
-         });
-      };
-      reader.readAsDataURL(file);
-   };
-
-   const update = () => {
+   const update = (values) => {
       setErrors(null)
-      const payload = { ...updatedUser }
+      const payload = { ...values }
 
-      if (payload.image) {
-         delete payload.image;
-         payload.image_path = payload.image_url;
-         delete payload.image_url;
-      } else {
-         delete payload.image_path
-         delete payload.image;
-         delete payload.image_url
+      if (payload.email) {
+         payload.username = payload.email;
       }
 
-      if (!payload.password) {
-         delete payload.password
-         delete payload.password_confirmation
-      }
+      payload.id = currentUser.id;
 
       axiosClient.put(`/user/${currentUser.id}`, payload)
          .then(({ data }) => {
@@ -80,11 +51,15 @@ const UserForm = () => {
          })
    }
 
+   const handleFormSubmit = (values, onSubmitProps) => {
+      update(values, onSubmitProps)
+   }
+
    return (
       <Box width={isNonMobileScreen ? "50%" : "95%"} p="1rem" m="1.5rem auto" borderRadius="1.5rem" textAlign={'center'}>
          <>
             <Formik
-               onSubmit={update}
+               onSubmit={handleFormSubmit}
                initialValues={updatedUser}
                validationSchema={registerSchema}
             >
@@ -110,20 +85,20 @@ const UserForm = () => {
                            label="First Name"
                            onBlur={handleBlur}
                            onChange={handleChange}
-                           value={values.first_name}
-                           name="first_name"
-                           error={Boolean(touched.first_name) && Boolean(errors.first_name)}
-                           helperText={touched.first_name && errors.first_name}
+                           value={values.firstname}
+                           name="firstname"
+                           error={Boolean(touched.firstname) && Boolean(errors.firstname)}
+                           helperText={touched.firstname && errors.firstname}
                            sx={{ gridColumn: "span 2" }}
                         />
                         <TextField
                            label="Last Name"
                            onBlur={handleBlur}
                            onChange={handleChange}
-                           value={values.last_name}
-                           name="last_name"
-                           error={Boolean(touched.last_name) && Boolean(errors.last_name)}
-                           helperText={touched.last_name && errors.last_name}
+                           value={values.lastname}
+                           name="lastname"
+                           error={Boolean(touched.lastname) && Boolean(errors.lastname)}
+                           helperText={touched.lastname && errors.lastname}
                            sx={{ gridColumn: "span 2" }}
                         />
                         <TextField
@@ -146,48 +121,6 @@ const UserForm = () => {
                            helperText={touched.occupation && errors.occupation}
                            sx={{ gridColumn: "span 4" }}
                         />
-                        <Box
-                           gridColumn="span 4"
-                           //gridRow="span 4"
-                           border={`1px solid ${palette.primary.dark}`}
-                           borderRadius="5px"
-                           p="1rem"
-                        >
-                           <Dropzone
-                              acceptedFiles=".jpg,.jpeg,.png"
-                              multiple={false}
-                              onDrop={(acceptedFiles) => {
-                                 setFieldValue("picture", acceptedFiles[0]);
-                                 onImageChoose(acceptedFiles[0])
-                              }}
-                           >
-                              {({ getRootProps, getInputProps }) => (
-                                 <Box
-                                    {...getRootProps()}
-                                    sx={{ "&:hover": { cursor: "pointer" } }}
-                                 >
-                                    <input {...getInputProps()} />
-                                    <Box
-                                       display='flex'
-                                       justifyContent='space-between'
-                                       alignItems='center'
-                                    >
-                                       <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-                                          <p><EditOutlinedIcon /></p>
-                                          <p>Change Picture Here</p>
-                                       </Stack>
-                                       {updatedUser.image_path && !updatedUser.image_url ? (
-                                          <Avatar sx={{ width: 70, height: 70 }} src={updatedUser.image_path && `${import.meta.env.VITE_API_BASE_URL}/${updatedUser.image_path}`} />
-                                       ) : (updatedUser.image_url ?
-                                          <Avatar sx={{ width: 70, height: 70 }} src={updatedUser.image_url} />
-                                          :
-                                          <Avatar sx={{ width: 70, height: 70, backgroundColor: 'black' }} />
-                                       )}
-                                    </Box>
-                                 </Box>
-                              )}
-                           </Dropzone>
-                        </Box>
                         <TextField
                            label="Email"
                            onBlur={handleBlur}
@@ -196,28 +129,6 @@ const UserForm = () => {
                            name="email"
                            error={Boolean(touched.email) && Boolean(errors.email)}
                            helperText={touched.email && errors.email}
-                           sx={{ gridColumn: "span 4" }}
-                        />
-                        <TextField
-                           label="Password"
-                           type="password"
-                           onBlur={handleBlur}
-                           onChange={handleChange}
-                           value={values.password}
-                           name="password"
-                           error={Boolean(touched.password) && Boolean(errors.password)}
-                           helperText={touched.password && errors.password}
-                           sx={{ gridColumn: "span 4" }}
-                        />
-                        <TextField
-                           label="Password Comfirmation"
-                           type="password"
-                           onBlur={handleBlur}
-                           onChange={handleChange}
-                           value={values.password_confirmation}
-                           name="password_confirmation"
-                           error={Boolean(touched.password) && Boolean(errors.password)}
-                           helperText={touched.password && errors.password}
                            sx={{ gridColumn: "span 4" }}
                         />
                      </Box>

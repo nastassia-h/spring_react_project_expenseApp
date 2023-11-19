@@ -7,7 +7,6 @@ import { setMode, setLogout } from "../store/index.js"
 import { useNavigate } from 'react-router-dom'
 import axiosClient from '../axios-client.js'
 import FlexBetween from '../components/FlexBetween'
-import UsersSearch from '../components/Search.jsx'
 import { setUser, setExpenses, setCategories } from '../store/index.js'
 
 const Navbar = () => {
@@ -27,10 +26,7 @@ const Navbar = () => {
    const fullName = `${user.firstname} ${user.lastname}`
 
    const logout = () => {
-      axiosClient.post('/logout')
-         .then(() => {
-            dispatch(setLogout())
-         })
+      dispatch(setLogout())
    }
 
    useEffect(() => {
@@ -61,11 +57,6 @@ const Navbar = () => {
             >
                Every dollar
             </Typography>
-            {isNonMobileScreens && (
-               <FlexBetween position='relative' border={`2px solid ${primaryLight}`} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
-                  <UsersSearch />
-               </FlexBetween>
-            )}
          </FlexBetween>
          {/* desktop nav */}
          {isNonMobileScreens ? (

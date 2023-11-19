@@ -5,17 +5,18 @@ import {
    WorkOutlineOutlined,
 } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
-import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const UserWidget = ({ userId, user }) => {
+const UserWidget = ({ userId, user, expenses }) => {
    const { palette } = useTheme();
    const navigate = useNavigate();
    const dark = palette.primary.dark;
    const medium = palette.primary.medium;
    const main = palette.primary.main;
+   const [totals, setTotals] = useState({ number: 0, sum: 0 });
 
    if (!user) {
       return null;
@@ -26,8 +27,15 @@ const UserWidget = ({ userId, user }) => {
       lastname,
       location,
       occupation,
-      image_path,
    } = user;
+
+   useEffect(() => {
+      let sum = 0;
+
+      expenses.map(expense => sum += expense.cost);
+      setTotals({ number: expenses.length, sum: sum })
+   }, [expenses.length])
+
 
    return (
       <WidgetWrapper>
@@ -37,7 +45,6 @@ const UserWidget = ({ userId, user }) => {
             pb="1.1rem"
          >
             <FlexBetween gap="1rem">
-               <UserImage image={image_path} />
                <Box>
                   <Typography
                      variant="h4"
@@ -86,17 +93,17 @@ const UserWidget = ({ userId, user }) => {
          {/* THIRD ROW */}
          <Box p="1rem 0">
             <FlexBetween mb="0.5rem">
-               <Typography color={medium}>Number of payments this month</Typography>
+               <Typography color={medium}>Number of payments</Typography>
                <Typography color={main} fontWeight="500">
                   {/* {viewedProfile} */}
-                  386
+                  {totals.number}
                </Typography>
             </FlexBetween>
             <FlexBetween>
                <Typography color={medium}>Total costs</Typography>
                <Typography color={main} fontWeight="500">
                   {/* {impressions} */}
-                  1279$
+                  {totals.sum}$
                </Typography>
             </FlexBetween>
          </Box>
