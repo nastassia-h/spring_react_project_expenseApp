@@ -99,6 +99,7 @@ const AddExpenseWidget = ({ isAddOpen = false, selectedCategory = 1 }) => {
                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                      label="Choose expense date"
+                     maxDate={dayjs()}
                      value={expense.date}
                      onChange={(e) => setExpense({ ...expense, date: e.toISOString() })}
                   />
